@@ -2,6 +2,7 @@ import streamlit
 import pandas
 import requests
 import snowflake.connector
+from urllib.error import URLError
 
 streamlit.title('My Parents New Healthy Diner')
 
@@ -38,6 +39,8 @@ fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
 # output to screen as a table
 streamlit.dataframe(fruityvice_normalized)
 
+#DON'T RUN ANYTHING PAST HERE WHILE WE TROUBLESHOOT
+streamlit.stop()
 #query trial account metadata
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 my_cur = my_cnx.cursor()
