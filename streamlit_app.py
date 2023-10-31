@@ -73,6 +73,7 @@ def get_fruit_load_list():
 if streamlit.button('Get Fruit Load List'):
   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
   my_data_rows = get_fruit_load_list()
+  my_cnx.close()
   streamlit.dataframe(my_data_rows)
 
 #DON'T RUN ANYTHING PAST HERE WHILE WE TROUBLESHOOT
@@ -86,16 +87,14 @@ def insert_row_snowflake(new_fruit):
     return "Thanks for adding " +  new_fruit
 
 #What fruit would you like to add? allow end user to add a fruit to the list
-try:
-  add_my_fruit = streamlit.text_input('What fruit would you like to add?')
-  if not add_my_fruit:
-      streamlit.error("Please input a fruit to add.")
-  else:
-      my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-      back_from_function = insert_row_snowflake(add_my_fruit)
+add_my_fruit = streamlit.text_input('What fruit would you like to add?')
 
-except URLError as e:
-  streamlit.error()
+#Add a button to insert fruit into Snowflake
+  if streamlit.button('Add Fruit'):  
+    my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+    back_from_function = insert_row_snowflake(add_my_fruit)
+    my_cnx.close()
+
 
 
 #streamlit.write('The user entered ', add_my_fruit)
